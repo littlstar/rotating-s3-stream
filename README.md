@@ -2,6 +2,9 @@
 
 This module creates a local write stream that periodically syncs and rotates to S3 based on file size and/or file duration. A write stream is created locally, then when the file exceeds `maxFileSize` or `maxFileDuration`, it is copied to S3, deleted locally, and a new write stream is created. By default, the files are `ISO 8601` DateTime format, but you can also supply a custom naming function with the `createFileName` option.
 
+## Install
+`rotating-s3-stream` has only been tested on MacOS and Linux. For maximum efficienty, it uses `child_process` along with the native AWS CLI, so that must be installed and configured separately. Instructions on how to do that can be found [here](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+
 ## Stream Options
 - **localPrefix** - {String} Required. Used as the local prefix for write stream.
 - **s3Prefix** - {String} Required. Used as the S3 prefix for syncing the write stream.
