@@ -58,6 +58,7 @@ class RotatingS3Stream extends EventEmitter {
       throw new Error('createFileName must be a function')
     }
 
+    // Default name format is to use moment's "format"
     if (!opts.createFileName) {
       this.createFileName = () => moment().format()
     } else {
@@ -92,6 +93,10 @@ class RotatingS3Stream extends EventEmitter {
     this.stream = fs.createWriteStream(this.source, {
       flags: 'a'
     })
+
+    // Use setImmediate to allow listeners to recieve this message initially
+    // If setImmediate is not used, the first message is not recieved, since
+    // this all happens synchronously on instantiation
     setImmediate(() => {
       this.emit('info', {
         message: 'Created new write stream',
