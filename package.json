@@ -1,0 +1,24 @@
+{
+  "name": "rotating-s3-stream",
+  "version": "0.0.1",
+  "description": "Writable local stream that rotates and syncs to AWS S3 based on max file size or age",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlstar/rotating-s3-stream.git"
+  },
+  "author": "Wells Johnston",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/littlstar/rotating-s3-stream/issues"
+  },
+  "homepage": "https://github.com/littlstar/rotating-s3-stream#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "moment": "^2.17.1",
+    "node-schedule": "^1.2.0"
+  }
+}
