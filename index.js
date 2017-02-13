@@ -128,11 +128,11 @@ class RotatingS3Stream extends EventEmitter {
 
       // Check if file has reached max age
       if (ageInSeconds > this.maxFileAge) {
-        this.rotate('Max file age reached')
+        this.rotate('File age')
 
         // Check if file has reached max size
       } else if (status.size > this.maxFileSize) {
-        this.rotate('Max file size reached')
+        this.rotate('File size')
       }
     })
   }
