@@ -145,12 +145,6 @@ class RotatingS3Stream extends EventEmitter {
    */
 
   rotate(reason) {
-    this.emit('info', {
-      message: 'Rotating stream',
-      source: this.source,
-      destination: this.destination,
-      reason
-    })
 
     // Save current source and destination, then create new write steram
     const source = this.source
@@ -179,7 +173,9 @@ class RotatingS3Stream extends EventEmitter {
           })
         } else {
           this.emit('info', {
-            message: 'Rotated and synced stream to s3',
+            message: 'Rotating stream',
+            reason,
+            sync: true,
             source,
             destination
           })
@@ -188,7 +184,9 @@ class RotatingS3Stream extends EventEmitter {
       })
     } else {
       this.emit('info', {
-        message: 'Rotating empty local stream without S3 sync',
+        message: 'Rotating stream',
+        reason: 'Empty file',
+        sync: false,
         source
       })
       fs.unlink(source)
