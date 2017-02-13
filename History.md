@@ -1,4 +1,9 @@
 
+0.0.4 / 2017-02-13
+==================
+
+  * chnaged 'message' to 'stream_message' to avoid graylog conflicts
+
 0.0.3 / 2017-02-13
 ==================
 
