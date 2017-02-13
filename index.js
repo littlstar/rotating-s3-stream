@@ -99,7 +99,7 @@ class RotatingS3Stream extends EventEmitter {
     // this all happens synchronously on instantiation
     setImmediate(() => {
       this.emit('info', {
-        message: 'Created new write stream',
+        stream_message: 'Created new write stream',
         local_source: this.source
       })
     })
@@ -114,7 +114,7 @@ class RotatingS3Stream extends EventEmitter {
     fs.stat(this.source, (error, status) => {
       if (error) {
         this.emit('error', {
-          message: 'fs.stat failed',
+          stream_message: 'fs.stat failed',
           local_source: this.source,
           error
         })
@@ -155,24 +155,24 @@ class RotatingS3Stream extends EventEmitter {
       const awscp = spawn('aws', ['s3', 'cp', source, destination])
 
       awscp.stdout.on('data', data => this.emit('info', {
-        message: data.toString().trim()
+        stream_message: data.toString().trim()
       }))
 
       awscp.stderr.on('data', data => this.emit('error', {
-        message: data.toString().trim()
+        stream_message: data.toString().trim()
       }))
 
       awscp.on('close', (code) => {
         if (code !== 0) {
           this.emit('error', {
-            message: 'AWS S3 cp failed',
+            stream_message: 'AWS S3 cp failed',
             code,
             local_source: source,
             s3_destination: destination
           })
         } else {
           this.emit('info', {
-            message: 'Rotating stream',
+            stream_message: 'Rotating stream',
             reason,
             sync: true,
             local_source: source,
@@ -183,7 +183,7 @@ class RotatingS3Stream extends EventEmitter {
       })
     } else {
       this.emit('info', {
-        message: 'Rotating stream',
+        stream_message: 'Rotating stream',
         reason: 'Empty file',
         sync: false,
         local_source: source
