@@ -100,8 +100,7 @@ class RotatingS3Stream extends EventEmitter {
     setImmediate(() => {
       this.emit('info', {
         message: 'Created new write stream',
-        source: this.source,
-        destination: this.destination
+        local_source: this.source
       })
     })
   }
@@ -116,7 +115,7 @@ class RotatingS3Stream extends EventEmitter {
       if (error) {
         this.emit('error', {
           message: 'fs.stat failed',
-          source: this.source,
+          local_source: this.source,
           error
         })
         return
@@ -168,16 +167,16 @@ class RotatingS3Stream extends EventEmitter {
           this.emit('error', {
             message: 'AWS S3 cp failed',
             code,
-            source,
-            destination
+            local_source: source,
+            s3_destination: destination
           })
         } else {
           this.emit('info', {
             message: 'Rotating stream',
             reason,
             sync: true,
-            source,
-            destination
+            local_source: source,
+            s3_destination: destination
           })
           fs.unlink(source)
         }
@@ -187,7 +186,7 @@ class RotatingS3Stream extends EventEmitter {
         message: 'Rotating stream',
         reason: 'Empty file',
         sync: false,
-        source
+        local_source: source
       })
       fs.unlink(source)
     }
