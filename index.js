@@ -181,7 +181,7 @@ class RotatingS3Stream extends EventEmitter {
       this.emit('info', {
         stream_message: 'Rotated stream',
         reason,
-        file_size: fileSize
+        file_size: fileSize,
         sync: false,
         local_source: source
       })
