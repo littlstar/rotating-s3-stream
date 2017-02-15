@@ -122,17 +122,15 @@ class RotatingS3Stream extends EventEmitter {
       }
 
       const ageInSeconds = Math.floor((Date.now() - this.created) / 1000)
-
-      // Save file size to avoid syncing if it is empty
-      this.empty = status.size === 0
+      const fileSize = status.size
 
       // Check if file has reached max age
       if (ageInSeconds > this.maxFileAge) {
-        this.rotate('File age')
+        this.rotate('File age', fileSize)
 
         // Check if file has reached max size
-      } else if (status.size > this.maxFileSize) {
-        this.rotate('File size')
+      } else if (fileSize > this.maxFileSize) {
+        this.rotate('File size', fileSize)
       }
     })
   }
@@ -141,9 +139,10 @@ class RotatingS3Stream extends EventEmitter {
    * Rotate write stream file, sync old one to S3 then delete
    *
    * @param {String} reason Reason for rotating file (max age, max size, force)
+   * @param {Number} fileSize Size of stream being rotated/synced
    */
 
-  rotate(reason) {
+  rotate(reason, fileSize) {
 
     // Save current source and destination, then create new write steram
     const source = this.source
@@ -151,12 +150,8 @@ class RotatingS3Stream extends EventEmitter {
     this.createStream()
 
     // If the file isn't empty, sync to S3
-    if (!this.empty) {
+    if (fileSize > 0) {
       const awscp = spawn('aws', ['s3', 'cp', source, destination])
-
-      awscp.stdout.on('data', data => this.emit('info', {
-        stream_message: data.toString().trim()
-      }))
 
       awscp.stderr.on('data', data => this.emit('error', {
         stream_message: data.toString().trim()
@@ -172,8 +167,9 @@ class RotatingS3Stream extends EventEmitter {
           })
         } else {
           this.emit('info', {
-            stream_message: 'Rotating stream',
+            stream_message: 'Rotated stream',
             reason,
+            file_size: fileSize,
             sync: true,
             local_source: source,
             s3_destination: destination
@@ -183,8 +179,9 @@ class RotatingS3Stream extends EventEmitter {
       })
     } else {
       this.emit('info', {
-        stream_message: 'Rotating stream',
-        reason: 'Empty file',
+        stream_message: 'Rotated stream',
+        reason,
+        file_size: fileSize
         sync: false,
         local_source: source
       })
