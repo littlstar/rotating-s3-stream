@@ -1,4 +1,9 @@
 
+0.0.6 / 2017-02-15
+==================
+
+  * better logging and internal management of file size
+
 0.0.5 / 2017-02-13
 ==================
 
