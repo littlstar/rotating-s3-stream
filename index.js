@@ -69,13 +69,14 @@ class RotatingS3Stream extends EventEmitter {
     this.maxFileSize = opts.maxFileSize
     this.maxFileAge = opts.maxFileAge
     this.s3Prefix = opts.s3Prefix
+    this.checkRotationSchedule = opts.checkRotationSchedule || '* * * * *'
 
     mkdirp.sync(this.localPrefix)
     this.createStream()
 
     // Check every minute if file should be rotated. If the stream is old
     // enough or the file size is large enough, ootate and sync to S3
-    schedule('* * * * *', () => this.checkAndRotate())
+    schedule(this.checkRotationSchedule, () => this.checkAndRotate())
   }
 
   /**
