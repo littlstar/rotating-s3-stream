@@ -11,7 +11,7 @@ This module creates a local write stream that periodically syncs and rotates to 
 - **maxFileSize** - {Number} Required. The max file size (bytes) the write stream can reach before rotating.
 - **maxFileAge** - {Number} Required. The max file age (seconds) the write stream can be before rotating.
 - **createFileName** - {Function} Optional. You can provide your own file-naming function. Defaults to ISO 8601.
-- **checkRotationSchedule** - {String} Optional. Provide a cron-style string that is the schedule for checking if a sync is necessary. Defaults to '* * * * *'
+- **checkRotationSchedule** - {String} Optional. Provide a cron-style string that is the schedule for checking if a sync is necessary. Defaults to `* * * * *`
 
 ## Example usage
 ```javascript
