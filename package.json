@@ -1,6 +1,6 @@
 {
   "name": "rotating-s3-stream",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Writable local stream that rotates and syncs to AWS S3 based on max file size or age",
   "main": "index.js",
   "repository": {
