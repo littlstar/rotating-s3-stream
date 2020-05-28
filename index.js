@@ -175,7 +175,7 @@ class RotatingS3Stream extends EventEmitter {
             local_source: source,
             s3_destination: destination
           })
-          fs.unlink(source)
+          fs.unlinkSync(source)
         }
       })
     } else {
@@ -186,7 +186,7 @@ class RotatingS3Stream extends EventEmitter {
         sync: false,
         local_source: source
       })
-      fs.unlink(source)
+      fs.unlinkSync(source)
     }
   }
 
@@ -205,8 +205,18 @@ class RotatingS3Stream extends EventEmitter {
    */
 
   flush() {
-    this.rotate({
-      reason: 'External flush request'
+    fs.stat(this.source, (error, status) => {
+      if (error) {
+        this.emit('error', {
+          stream_message: 'fs.stat failed',
+          local_source: this.source,
+          error
+        })
+        return
+      }
+      this.rotate({
+        reason: 'External flush request'
+      }, status.size)
     })
   }
 }
